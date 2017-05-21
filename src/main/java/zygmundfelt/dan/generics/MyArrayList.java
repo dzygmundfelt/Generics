@@ -6,15 +6,15 @@ public class MyArrayList<E> implements List<E> {
 
     private Object[] myArray;
     private int size;
+    private static final int MINIMUM_LENGTH = 10;
 
     MyArrayList() {
-        this(0);
-        size = 0;
+        this(MINIMUM_LENGTH);
     }
 
-    MyArrayList(int size) {
-        myArray = new Object[size];
-        this.size = size;
+    MyArrayList(int length) {
+        myArray = new Object[length];
+        size = 0;
     }
 
     public boolean add(Object element) {
@@ -42,7 +42,7 @@ public class MyArrayList<E> implements List<E> {
     public boolean addAll(Collection<? extends E> c) {
         Object[] objects = c.toArray();
         int currentSize = size;
-        ensureCapacity(objects.length);
+        ensureCapacity(size + objects.length);
         for(int i = 0; i < objects.length; i++) {
             myArray[currentSize + i] = objects[i];
         }
@@ -51,11 +51,23 @@ public class MyArrayList<E> implements List<E> {
     }
 
     public boolean addAll(int index, Collection<? extends E> c) {
-
+        Object[] objects = c.toArray();
+        Object[] myArrayCopy = new Object[myArray.length + objects.length];
+        for(int i = 0; i < index; i++) {
+            myArrayCopy[i] = myArray[i];
+        }
+        for(int i = 0; i < objects.length; i++) {
+            myArrayCopy[i + index] = objects[i];
+        }
+        for(int i = 0; i < size - index; i++) {
+            myArrayCopy[i + index + objects.length] = myArray[i + index];
+        }
+        myArray = myArrayCopy;
+        size += objects.length;
         return false;
     }
 
-    public void checkTooMuchCapacity() {
+    private void checkTooMuchCapacity() {
         if(myArray.length / 3 > size) {
             int newSize = myArray.length / 2;
             Object[] myArrayCopy = new Object[newSize];
@@ -68,7 +80,7 @@ public class MyArrayList<E> implements List<E> {
     }
 
     public void clear() {
-        myArray = new Object[0];
+        myArray = new Object[MINIMUM_LENGTH];
         size = 0;
     }
 
@@ -91,7 +103,7 @@ public class MyArrayList<E> implements List<E> {
         return true;
     }
 
-    public void ensureCapacity(int minCapacity) {
+    private void ensureCapacity(int minCapacity) {
         if(minCapacity >= myArray.length) {
             Object[] myArrayCopy = new Object[minCapacity * 2];
             for(int i = 0; i < size; i++) {
@@ -110,6 +122,7 @@ public class MyArrayList<E> implements List<E> {
         return (E) myArray[index];
     }
 
+    //TODO - calculate String hashcodes for testing
     public int hashCode() {
         int hashCode = 0;
         for(Object o : myArray) {
