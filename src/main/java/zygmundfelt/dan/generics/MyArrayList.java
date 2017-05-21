@@ -82,7 +82,13 @@ public class MyArrayList<E> implements List<E> {
     }
 
     public boolean containsAll(Collection<?> c) {
-        return false;
+        Object[] objects = c.toArray();
+        for(Object o : objects) {
+            if(!contains(o)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void ensureCapacity(int minCapacity) {
@@ -157,6 +163,7 @@ public class MyArrayList<E> implements List<E> {
             myArray[i-1] = temp2;
         }
         size--;
+        checkTooMuchCapacity();
         return (E) temp1;
     }
 
@@ -173,15 +180,18 @@ public class MyArrayList<E> implements List<E> {
                 i--;
             }
         }
+        checkTooMuchCapacity();
         return true;
     }
 
     public boolean removeAll(Collection<?> c) {
+        boolean hasRemoval = false;
         Object[] objects = c.toArray();
         for(Object o : objects) {
-            remove(o);
+            hasRemoval = remove(o);
         }
-        return true;
+        checkTooMuchCapacity();
+        return hasRemoval;
     }
 
     void resize(int newSize) {
