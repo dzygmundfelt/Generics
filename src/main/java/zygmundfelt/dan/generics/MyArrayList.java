@@ -28,8 +28,8 @@ public class MyArrayList<E> implements List<E> {
     public void add(int index, E element) {
         //TODO - include rangeCheck
         ensureCapacity(size + 1);
-        Object temp1 = myArray[index], temp2;
-        for(int i = index + 1; i < size + 1; i++) {
+        Object temp1 = element, temp2;
+        for(int i = index; i < size + 1; i++) {
             temp2 = myArray[i];
             myArray[i] = temp1;
             temp1 = myArray[i+1];
@@ -85,8 +85,8 @@ public class MyArrayList<E> implements List<E> {
     }
 
     public boolean contains(Object element) {
-        for(Object o : myArray) {
-            if(o.equals(element)) {
+        for(int i = 0; i < size; i++) {
+            if(myArray[i].equals(element)) {
                 return true;
             }
         }

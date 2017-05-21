@@ -39,8 +39,7 @@ public class TestMyArrayList {
 
     @Test
     public void addStringTest() {
-        myArrayList3.add("Hello there.");
-        String expected = "Hello there.";
+        String expected = "hello";
 
         String actual = myArrayList3.get(0);
 
@@ -149,13 +148,66 @@ public class TestMyArrayList {
 
     @Test
     public void isEmptyTrueTest() {
-        
+        Assert.assertTrue(myArrayList1.isEmpty());
     }
 
     @Test
-    public void removeByElementTrueTest() {
-
+    public void isEmptyFalseTest() {
+        Assert.assertFalse(myArrayList2.isEmpty());
     }
+
+    @Test
+    public void lastIndexOfNonexistentTest() {
+        int expected = -1;
+
+        int actual = myArrayList3.indexOf("howdy");
+
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void lastIndexOfWithOneInstanceTest() {
+        int expected = 2;
+
+        int actual = myArrayList3.indexOf("guys");
+
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void lastIndexOfWithMultipleInstancesTest() {
+        myArrayList3.add("hello");
+        int expected = 4;
+
+        int actual = myArrayList3.lastIndexOf("hello");
+
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void removeByIndexTest() {
+        String expected = "!";
+
+        String actual = myArrayList3.remove(3);
+
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void removeByObjectTrueTest() {
+        boolean result = myArrayList2.remove(new Integer(9));
+
+        Assert.assertTrue(result);
+    }
+
+    @Test
+    public void removeByObjectFalseTest() {
+        boolean result = myArrayList2.remove(new Integer(10));
+
+        Assert.assertFalse(result);
+    }
+
+
 
 
 }
