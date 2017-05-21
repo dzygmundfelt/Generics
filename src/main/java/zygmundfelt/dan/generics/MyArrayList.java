@@ -1,16 +1,10 @@
 package zygmundfelt.dan.generics;
 
-//TODO - after finishing methods below, add more ArrayList methods
-//TODO -
-
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 public class MyArrayList<E> implements List<E> {
 
-    Object[] myArray;
+    private Object[] myArray;
     private int size;
 
     MyArrayList() {
@@ -24,26 +18,66 @@ public class MyArrayList<E> implements List<E> {
     }
 
     public boolean add(Object element) {
-        return false;
+        //TODO - include rangeCheck
+        ensureCapacity(size + 1);
+        myArray[size] = element;
+        size++;
+        return true;
     }
 
     public void add(int index, E element) {
-
+        //TODO - include rangeCheck
+        ensureCapacity(size + 1);
+        Object temp1 = myArray[index], temp2;
+        for(int i = index + 1; i < size + 1; i++) {
+            temp2 = myArray[i];
+            myArray[i] = temp1;
+            temp1 = myArray[i+1];
+            myArray[i+1] = temp2;
+        }
+        myArray[size] = temp1;
+        size++;
     }
 
     public boolean addAll(Collection<? extends E> c) {
-        return false;
+        Object[] objects = c.toArray();
+        int currentSize = size;
+        ensureCapacity(objects.length);
+        for(int i = 0; i < objects.length; i++) {
+            myArray[currentSize + i] = objects[i];
+        }
+        size += objects.length;
+        return objects.length > 0;
     }
 
     public boolean addAll(int index, Collection<? extends E> c) {
+
         return false;
     }
 
-    public void clear() {
+    public void checkTooMuchCapacity() {
+        if(myArray.length / 3 > size) {
+            int newSize = myArray.length / 2;
+            Object[] myArrayCopy = new Object[newSize];
+            for(int i = 0; i < size; i++) {
+                myArrayCopy[i] = myArray[i];
+            }
+            myArray = myArrayCopy;
+            size = newSize;
+        }
+    }
 
+    public void clear() {
+        myArray = new Object[0];
+        size = 0;
     }
 
     public boolean contains(Object element) {
+        for(Object o : myArray) {
+            if(o.equals(element)) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -52,7 +86,13 @@ public class MyArrayList<E> implements List<E> {
     }
 
     public void ensureCapacity(int minCapacity) {
-
+        if(minCapacity >= myArray.length) {
+            Object[] myArrayCopy = new Object[minCapacity * 2];
+            for(int i = 0; i < size; i++) {
+                myArrayCopy[i] = myArray[i];
+            }
+            myArray = myArrayCopy;
+        }
     }
 
     public boolean equals(Object o) {
@@ -60,19 +100,29 @@ public class MyArrayList<E> implements List<E> {
     }
 
     public E get(int index) {
-        return null;
+        //TODO - rangeCheck
+        return (E) myArray[index];
     }
 
     public int hashCode() {
-        return 0;
+        int hashCode = 0;
+        for(Object o : myArray) {
+            hashCode += o.hashCode();
+        }
+        return hashCode;
     }
 
     public int indexOf(Object o) {
-        return 0;
+        for(int i = 0; i < size; i++) {
+            if(myArray[i].equals(o)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     public boolean isEmpty() {
-        return false;
+        return size == 0;
     }
 
     public Iterator<E> iterator() {
@@ -80,7 +130,13 @@ public class MyArrayList<E> implements List<E> {
     }
 
     public int lastIndexOf(Object o) {
-        return 0;
+        int lastIndex = -1;
+        for(int i = 0; i < size; i++) {
+            if(myArray[i].equals(o)) {
+                lastIndex = i;
+            }
+        }
+        return lastIndex;
     }
 
     public ListIterator<E> listIterator() {
@@ -92,39 +148,89 @@ public class MyArrayList<E> implements List<E> {
     }
 
     public E remove(int index) {
-        return null;
+        //TODO - rangeCheck
+        Object temp1 = null, temp2;
+        for(int i = size - 1; i > index; i--) {
+            temp2 = myArray[i];
+            myArray[i] = temp1;
+            temp1 = myArray[i-1];
+            myArray[i-1] = temp2;
+        }
+        size--;
+        return (E) temp1;
     }
 
     public boolean remove(Object element) {
-        return false;
+        if(element == null) {
+            return true;
+        }
+        if(!contains(element)) {
+            return false;
+        }
+        for(int i = 0; i < size; i++) {
+            if(myArray[i].equals(element)) {
+                remove(i);
+                i--;
+            }
+        }
+        return true;
     }
 
     public boolean removeAll(Collection<?> c) {
-        return false;
+        Object[] objects = c.toArray();
+        for(Object o : objects) {
+            remove(o);
+        }
+        return true;
     }
 
-    void resize() {
+    void resize(int newSize) {
 
     }
 
     public boolean retainAll(Collection<?> c) {
-        return false;
+        Object[] objects = c.toArray();
+        Object[] myArrayCopy = new Object[myArray.length];
+        int oldSize = size;
+        int i = 0;
+        for(Object o : myArray) {
+            for(Object obj : objects) {
+                if(obj.equals(o)) {
+                    myArrayCopy[i] = o;
+                    i++;
+                }
+            }
+        }
+        myArray = myArrayCopy;
+        size = i;
+        return oldSize != size;
     }
 
     public E set(int index, E element) {
-        return null;
+        //TODO - rangeCheck
+        myArray[index] = element;
+        return element;
     }
 
     public int size() {
-        return 0;
+        return size;
     }
 
     public List<E> subList(int fromIndex, int toIndex) {
-        return null;
+        //TODO - double rangeChecks
+        List<E> list = new ArrayList<E>();
+        for(int i = fromIndex; i <= toIndex; i++) {
+            list.add((E) myArray[i]);
+        }
+        return list;
     }
 
     public Object[] toArray() {
-        return new Object[0];
+        Object[] myArrayCopy = new Object[size];
+        for(int i = 0; i < size; i++) {
+            myArrayCopy[i] = myArray[i];
+        }
+        return myArrayCopy;
     }
 
     public <T> T[] toArray(T[] a) {
