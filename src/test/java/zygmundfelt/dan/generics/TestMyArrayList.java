@@ -3,6 +3,7 @@ package zygmundfelt.dan.generics;
 import org.junit.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TestMyArrayList {
 
@@ -195,60 +196,74 @@ public class TestMyArrayList {
 
     @Test
     public void removeByObjectTrueTest() {
-        boolean result = myArrayList2.remove(new Integer(9));
+        boolean result = myArrayList3.remove("you");
 
         Assert.assertTrue(result);
     }
 
     @Test
     public void removeByObjectFalseTest() {
-        boolean result = myArrayList2.remove(new Integer(10));
+        boolean result = myArrayList3.remove("uoy");
 
         Assert.assertFalse(result);
     }
 
+    @Test
+    public void removeAllTest() {
+        List<String> list = new ArrayList<String>();
+        list.add("!");
+        list.add("hello");
+        String[] expected = {"you", "guys"};
 
+        myArrayList3.removeAll(list);
 
+        for(int i = 0; i < 1; i++) {
+            Assert.assertEquals(expected[i], myArrayList3.get(i));
+        }
+    }
+
+    @Test
+    public void retainAllTest() {
+        List<String> list = new ArrayList<String>();
+        list.add("!");
+        list.add("hello");
+        String[] expected = {"hello", "!"};
+
+        myArrayList3.retainAll(list);
+
+        for(int i = 0; i < 1; i++) {
+            Assert.assertEquals(expected[i], myArrayList3.get(i));
+        }
+    }
+
+    @Test
+    public void setTest() {
+        myArrayList3.set(1, "there");
+        String expected = "there";
+
+        String actual = myArrayList3.get(1);
+
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void sublistTest() {
+        String[] expected = {"you", "guys", "!"};
+
+        List<String> actual = myArrayList3.subList(1,3);
+
+        for(int i = 0; i < 3; i++) {
+            Assert.assertEquals(expected[i], actual.get(i));
+        }
+    }
+
+    @Test
+    public void toArrayTest() {
+        int expected = 4;
+
+        int result = myArrayList3.toArray().length;
+
+        Assert.assertEquals(expected, result);
+    }
 
 }
-
-
-//    void add() {
-//
-//    }
-//
-//    void add(int index) {
-//
-//    }
-//
-//    E get(int index) {
-//        return null;
-//    }
-//
-//    E remove(int index) {
-//        return null;
-//    }
-//
-//    boolean remove(E element) {
-//        return false;
-//    }
-//
-//    E set(int index, E element) {
-//        return null;
-//    }
-//
-//    void clear() {
-//
-//    }
-//
-//    boolean isEmpty() {
-//        return false;
-//    }
-//
-//    boolean contains(E element) {
-//        return false;
-//    }
-//
-//    void resize() {
-//
-//    }

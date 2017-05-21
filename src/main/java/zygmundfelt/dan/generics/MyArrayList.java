@@ -18,7 +18,6 @@ public class MyArrayList<E> implements List<E> {
     }
 
     public boolean add(Object element) {
-        //TODO - include rangeCheck
         ensureCapacity(size + 1);
         myArray[size] = element;
         size++;
@@ -26,7 +25,9 @@ public class MyArrayList<E> implements List<E> {
     }
 
     public void add(int index, E element) {
-        //TODO - include rangeCheck
+        if(!rangeCheck(index)) {
+            return;
+        }
         ensureCapacity(size + 1);
         Object temp1 = element, temp2;
         for(int i = index; i < size + 1; i++) {
@@ -118,7 +119,9 @@ public class MyArrayList<E> implements List<E> {
     }
 
     public E get(int index) {
-        //TODO - rangeCheck
+        if(!rangeCheck(index)) {
+            return null;
+        }
         return (E) myArray[index];
     }
 
@@ -166,18 +169,21 @@ public class MyArrayList<E> implements List<E> {
         return null;
     }
 
+    private boolean rangeCheck(int index) {
+        return index >= 0 && index < size;
+    }
+
     public E remove(int index) {
-        //TODO - rangeCheck
-        Object temp1 = null, temp2;
-        for(int i = size - 1; i > index; i--) {
-            temp2 = myArray[i];
-            myArray[i] = temp1;
-            temp1 = myArray[i-1];
-            myArray[i-1] = temp2;
+        if(!rangeCheck(index)) {
+            return null;
+        }
+        E retval = (E) myArray[index];
+        for(int i = index; i < size - 1; i++) {
+            myArray[i] = myArray[i+1];
         }
         size--;
         checkTooMuchCapacity();
-        return (E) temp1;
+        return (E) retval;
     }
 
     public boolean remove(Object element) {
@@ -230,7 +236,9 @@ public class MyArrayList<E> implements List<E> {
     }
 
     public E set(int index, E element) {
-        //TODO - rangeCheck
+        if(!rangeCheck(index)) {
+            return null;
+        }
         myArray[index] = element;
         return element;
     }
@@ -240,7 +248,12 @@ public class MyArrayList<E> implements List<E> {
     }
 
     public List<E> subList(int fromIndex, int toIndex) {
-        //TODO - double rangeChecks
+        if(fromIndex - toIndex <= 0) {
+            return null;
+        }
+        if(!rangeCheck(fromIndex) || !rangeCheck(toIndex)) {
+            return null;
+        }
         List<E> list = new ArrayList<E>();
         for(int i = fromIndex; i <= toIndex; i++) {
             list.add((E) myArray[i]);
