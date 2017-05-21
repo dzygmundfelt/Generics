@@ -69,6 +69,9 @@ public class MyArrayList<E> implements List<E> {
     }
 
     private void checkTooMuchCapacity() {
+        if(myArray.length < 30) {
+            return;
+        }
         if(myArray.length / 3 > size) {
             int newSize = myArray.length / 2;
             Object[] myArrayCopy = new Object[newSize];
@@ -114,6 +117,7 @@ public class MyArrayList<E> implements List<E> {
         }
     }
 
+    //TODO - use equals override recommendations from book
     public boolean equals(Object o) {
         return false;
     }
@@ -125,11 +129,10 @@ public class MyArrayList<E> implements List<E> {
         return (E) myArray[index];
     }
 
-    //TODO - calculate String hashcodes for testing
     public int hashCode() {
         int hashCode = 0;
-        for(Object o : myArray) {
-            hashCode += o.hashCode();
+        for(int i = 0; i < size; i++) {
+            hashCode += myArray[i].hashCode();
         }
         return hashCode;
     }
@@ -207,6 +210,7 @@ public class MyArrayList<E> implements List<E> {
         boolean hasRemoval = false;
         Object[] objects = c.toArray();
         for(Object o : objects) {
+            System.out.println(size);
             hasRemoval = remove(o);
         }
         checkTooMuchCapacity();
@@ -222,10 +226,10 @@ public class MyArrayList<E> implements List<E> {
         Object[] myArrayCopy = new Object[myArray.length];
         int oldSize = size;
         int i = 0;
-        for(Object o : myArray) {
+        for(int j = 0; j < size; j++) {
             for(Object obj : objects) {
-                if(obj.equals(o)) {
-                    myArrayCopy[i] = o;
+                if(obj.equals(myArray[j])) {
+                    myArrayCopy[i] = myArray[j];
                     i++;
                 }
             }
@@ -248,7 +252,7 @@ public class MyArrayList<E> implements List<E> {
     }
 
     public List<E> subList(int fromIndex, int toIndex) {
-        if(fromIndex - toIndex <= 0) {
+        if(toIndex - fromIndex <= 0) {
             return null;
         }
         if(!rangeCheck(fromIndex) || !rangeCheck(toIndex)) {

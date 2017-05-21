@@ -22,7 +22,13 @@ public class MySet<E> implements Set<E> {
         return false;
     }
 
-    public boolean containsAll(Collection<? extends E> c) {
+    public boolean containsAll(Collection<?> c) {
+        Object[] objects = new Object[c.size()];
+        for(int i = 0; i < c.size(); i++) {
+            if(!contains(objects[i])) {
+                return false;
+            }
+        }
         return true;
     }
 

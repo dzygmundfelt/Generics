@@ -7,13 +7,13 @@ import java.util.List;
 
 public class TestMyArrayList {
 
-    MyArrayList<Integer> myArrayList1;
-    MyArrayList<Integer> myArrayList2;
-    MyArrayList<String> myArrayList3;
+    private MyArrayList<Integer> myArrayList1;
+    private MyArrayList<Integer> myArrayList2;
+    private MyArrayList<String> myArrayList3;
 
     @Before
     public void initialize() {
-        myArrayList1 = new MyArrayList<Integer>(10);
+        myArrayList1 = new MyArrayList<Integer>();
         myArrayList2 = new MyArrayList<Integer>(10);
         myArrayList3 = new MyArrayList<String>(10);
 
@@ -132,6 +132,15 @@ public class TestMyArrayList {
     }
 
     @Test
+    public void hashCodeTest() {
+        int expected = 102466970;
+
+        int actual = myArrayList3.hashCode();
+
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
     public void indexOfPresentTest() {
         int expected = 1;
 
@@ -210,7 +219,7 @@ public class TestMyArrayList {
 
     @Test
     public void removeAllTest() {
-        List<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<String>();
         list.add("!");
         list.add("hello");
         String[] expected = {"you", "guys"};
