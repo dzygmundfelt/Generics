@@ -210,7 +210,6 @@ public class MyArrayList<E> implements List<E> {
         boolean hasRemoval = false;
         Object[] objects = c.toArray();
         for(Object o : objects) {
-            System.out.println(size);
             hasRemoval = remove(o);
         }
         checkTooMuchCapacity();
