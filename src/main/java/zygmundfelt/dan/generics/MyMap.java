@@ -6,11 +6,11 @@ import java.util.Set;
 
 public class MyMap<K,V> implements Map<K,V> {
 
-    public class myEntry implements Entry<K,V> {
+    public class MyEntry implements Entry<K,V> {
         private Object key;
         private Object value;
 
-        myEntry(Object key, Object value) {
+        MyEntry(Object key, Object value) {
             this.key = key;
             this.value = value;
         }
@@ -58,10 +58,28 @@ public class MyMap<K,V> implements Map<K,V> {
     }
 
     public boolean containsKey(Object key) {
+        for(Object o : myMap) {
+            if(o == null) {
+                continue;
+            }
+            MyEntry entry = (MyEntry) o;
+            if(entry.getKey().equals(key)) {
+                return true;
+            }
+        }
         return false;
     }
 
     public boolean containsValue(Object value) {
+        for(Object o : myMap) {
+            if(o == null) {
+                continue;
+            }
+            MyEntry entry = (MyEntry) o;
+            if(entry.getValue().equals(value)) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -69,16 +87,49 @@ public class MyMap<K,V> implements Map<K,V> {
         return null;
     }
 
+    private void ensureCapacity(int minCapacity) {
+        if(minCapacity >= myMap.length) {
+            Object[] myMapCopy = new Object[minCapacity * 2];
+            for(int i = 0; i < size; i++) {
+                myMapCopy[i] = myMap[i];
+            }
+            myMap = myMapCopy;
+        }
+    }
+
     public boolean equals(Object o) {
         return false;
     }
 
+    private void fillNullIndex(MyEntry entry) {
+        for(int i = 0; i < myMap.length; i++) {
+            if(myMap[i] == null) {
+                myMap[i] = entry;
+                size++;
+                return;
+            }
+        }
+    }
+
     public V get(Object key) {
+        for(Object o : myMap) {
+            if(o == null) {
+                continue;
+            }
+            MyEntry entry = (MyEntry) o;
+            if(entry.getKey().equals(key)) {
+                return entry.getValue();
+            }
+        }
         return null;
     }
 
     public int hashCode() {
-        return 0;
+        int hashCode = 0;
+        for(Object o : myMap) {
+            hashCode += o.hashCode();
+        }
+        return hashCode;
     }
 
     public boolean isEmpty() {
