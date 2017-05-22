@@ -134,7 +134,7 @@ public class TestMySet {
 
     @Test
     public void hashCodeTest() {
-        int expected = 0;
+        int expected = 101790078;
 
         int actual = mySet1.hashCode();
 

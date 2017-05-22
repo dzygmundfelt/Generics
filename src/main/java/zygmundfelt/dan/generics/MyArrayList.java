@@ -6,10 +6,10 @@ public class MyArrayList<E> implements List<E> {
 
     private Object[] myArray;
     private int size;
-    private static final int MINIMUM_LENGTH = 10;
+    private static final int MINIMUM_CAPACITY = 10;
 
     MyArrayList() {
-        this(MINIMUM_LENGTH);
+        this(MINIMUM_CAPACITY);
     }
 
     MyArrayList(int length) {
@@ -69,10 +69,7 @@ public class MyArrayList<E> implements List<E> {
     }
 
     private void checkTooMuchCapacity() {
-        if(myArray.length < 30) {
-            return;
-        }
-        if(myArray.length / 3 > size) {
+        if(myArray.length > 30 && myArray.length / 3 > size) {
             int newSize = myArray.length / 2;
             Object[] myArrayCopy = new Object[newSize];
             for(int i = 0; i < size; i++) {
@@ -84,7 +81,7 @@ public class MyArrayList<E> implements List<E> {
     }
 
     public void clear() {
-        myArray = new Object[MINIMUM_LENGTH];
+        myArray = new Object[MINIMUM_CAPACITY];
         size = 0;
     }
 

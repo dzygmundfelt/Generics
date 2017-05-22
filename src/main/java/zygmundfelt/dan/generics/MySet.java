@@ -8,10 +8,10 @@ public class MySet<E> implements Set<E> {
 
     private Object[] mySet;
     private int size;
-    private static final int MINIMUM_SIZE = 10;
+    private static final int MINIMUM_CAPACITY = 10;
 
     MySet() {
-        mySet = new Object[MINIMUM_SIZE];
+        mySet = new Object[MINIMUM_CAPACITY];
         size = 0;
     }
 
@@ -35,8 +35,24 @@ public class MySet<E> implements Set<E> {
         return size != oldSize;
     }
 
+    private void checkTooMuchCapacity() {
+        if(mySet.length > 20 && mySet.length / 3 > size) {
+            int newLength = mySet.length / 2;
+            Object[] mySetCopy = new Object[newLength];
+            int i = 0;
+            for(int j = 0; j < mySet.length; j++) {
+                if(mySet[j] != null) {
+                    mySetCopy[i] = mySet[j];
+                    i++;
+                }
+            }
+            mySet = mySetCopy;
+        }
+    }
+
     public void clear() {
-        mySet = new Object[MINIMUM_SIZE];
+        mySet = new Object[MINIMUM_CAPACITY];
+        size = 0;
     }
 
     public boolean contains(Object o) {
@@ -56,8 +72,8 @@ public class MySet<E> implements Set<E> {
     }
 
     public boolean containsAll(Collection<?> c) {
-        Object[] objects = new Object[c.size()];
-        for(int i = 0; i < c.size(); i++) {
+        Object[] objects = c.toArray();
+        for(int i = 0; i < objects.length; i++) {
             if(!contains(objects[i])) {
                 return false;
             }
@@ -111,6 +127,8 @@ public class MySet<E> implements Set<E> {
         for(int i = 0; i < mySet.length; i++) {
             if(o.equals(mySet[i])) {
                 mySet[i] = null;
+                size--;
+                checkTooMuchCapacity();
                 return true;
             }
         }
@@ -126,15 +144,16 @@ public class MySet<E> implements Set<E> {
         return size != oldSize;
     }
 
-    //TODO - figure out how I'm going to reduce the length of mySet
     public boolean retainAll(Collection<?> c) {
         Object[] objects = c.toArray();
         int oldSize = size;
         for(int i = 0; i < mySet.length; i++) {
-            if(mySet[i] != null) {
-
+            if(mySet[i] != null && !c.contains(mySet[i])) {
+                mySet[i] = null;
+                size--;
             }
         }
+        checkTooMuchCapacity();
         return size != oldSize;
     }
 
@@ -148,6 +167,7 @@ public class MySet<E> implements Set<E> {
         for(int j = 0; j < mySet.length; j++) {
             if(mySet[j] != null) {
                 mySetCopy[i] = mySet[j];
+                i++;
             }
         }
         return mySetCopy;
