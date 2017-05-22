@@ -118,11 +118,24 @@ public class MySet<E> implements Set<E> {
     }
 
     public boolean removeAll(Collection<?> c) {
-        return false;
+        Object[] objects = c.toArray();
+        int oldSize = size;
+        for(Object o : objects) {
+            remove(o);
+        }
+        return size != oldSize;
     }
 
+    //TODO - figure out how I'm going to reduce the length of mySet
     public boolean retainAll(Collection<?> c) {
-        return false;
+        Object[] objects = c.toArray();
+        int oldSize = size;
+        for(int i = 0; i < mySet.length; i++) {
+            if(mySet[i] != null) {
+
+            }
+        }
+        return size != oldSize;
     }
 
     public int size() {
