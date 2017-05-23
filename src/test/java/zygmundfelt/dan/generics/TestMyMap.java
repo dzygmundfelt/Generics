@@ -83,7 +83,7 @@ public class TestMyMap {
 
     @Test
     public void hashCodeTest() {
-        int expected = 0;
+        int expected = 1586382501;
 
         int actual = myMap2.hashCode();
 

@@ -145,7 +145,6 @@ public class MySet<E> implements Set<E> {
     }
 
     public boolean retainAll(Collection<?> c) {
-        Object[] objects = c.toArray();
         int oldSize = size;
         for(int i = 0; i < mySet.length; i++) {
             if(mySet[i] != null && !c.contains(mySet[i])) {

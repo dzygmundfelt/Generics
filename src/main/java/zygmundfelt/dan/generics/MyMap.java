@@ -84,7 +84,13 @@ public class MyMap<K,V> implements Map<K,V> {
     }
 
     public Set<Map.Entry<K,V>> entrySet() {
-        return null;
+        Set<Map.Entry<K,V>> entries = new MySet<MyMap.Entry<K, V>>();
+        for(int i = 0; i < myMap.length; i++) {
+            if(myMap[i] != null) {
+                entries.add((MyEntry) myMap[i]);
+            }
+        }
+        return entries;
     }
 
     private void ensureCapacity(int minCapacity) {
@@ -97,6 +103,7 @@ public class MyMap<K,V> implements Map<K,V> {
         }
     }
 
+    //TODO - two objects are equal if m1.entrySet().equals(m2.entrySet()), which would necessitate making mySet .equals
     public boolean equals(Object o) {
         return false;
     }
@@ -127,6 +134,9 @@ public class MyMap<K,V> implements Map<K,V> {
     public int hashCode() {
         int hashCode = 0;
         for(Object o : myMap) {
+            if(o == null) {
+                continue;
+            }
             hashCode += o.hashCode();
         }
         return hashCode;
@@ -141,19 +151,49 @@ public class MyMap<K,V> implements Map<K,V> {
     }
 
     public V put(K key, V value) {
+        //for loop scans myMap and accommodates a change to an entry
+        for(Object o : myMap) {
+            if(o == null) {
+                continue;
+            }
+            MyEntry entry = (MyEntry) o;
+            if(entry.getKey().equals(key)) {
+                V retval = entry.getValue();
+                entry.setValue(value);
+                return retval;
+            }
+        }
+        ensureCapacity(size + 1);
+        fillNullIndex(new MyEntry(key, value));
         return null;
     }
 
     public void putAll(Map<? extends K,? extends V> map) {
-
+        MyMap<K, V> thisMap = (MyMap<K,V>) map;
+        for(Entry entry : thisMap.entrySet()) {
+            MyEntry myEntry = (MyEntry) entry;
+            put(myEntry.getKey(), myEntry.getValue());
+        }
     }
 
     public V remove(Object key) {
+        for(int i = 0; i < myMap.length; i++) {
+            if(myMap[i] == null) {
+                continue;
+            }
+            MyEntry entry = (MyEntry) myMap[i];
+            if(entry.getKey().equals(key)) {
+                V retval = entry.getValue();
+                myMap[i] = null;
+                size--;
+                return retval;
+            }
+        }
         return null;
     }
 
     public int size() {
-        return 0;
+        return size;
     }
 
     public Collection<V> values() {
