@@ -84,10 +84,11 @@ public class MyMap<K,V> implements Map<K,V> {
     }
 
     public Set<Map.Entry<K,V>> entrySet() {
-        Set<Map.Entry<K,V>> entries = new MySet<MyMap.Entry<K, V>>();
+        Set<Map.Entry<K,V>> entries = new MySet<Entry<K,V>>();
         for(int i = 0; i < myMap.length; i++) {
             if(myMap[i] != null) {
-                entries.add((MyEntry) myMap[i]);
+                System.out.println("i");
+                entries.add((Map.Entry<K,V>) myMap[i]);
             }
         }
         return entries;
@@ -103,9 +104,16 @@ public class MyMap<K,V> implements Map<K,V> {
         }
     }
 
-    //TODO - two objects are equal if m1.entrySet().equals(m2.entrySet()), which would necessitate making mySet .equals
     public boolean equals(Object o) {
-        return false;
+        if(this == o) {
+            return true;
+        } else if(o == null) {
+            return false;
+        } else if(getClass() != o.getClass()) {
+            return false;
+        }
+        MyMap<K,V> other = (MyMap<K,V>) o;
+        return entrySet().equals(other.entrySet());
     }
 
     private void fillNullIndex(MyEntry entry) {

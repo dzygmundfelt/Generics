@@ -57,7 +57,7 @@ public class MySet<E> implements Set<E> {
 
     public boolean contains(Object o) {
         if(o == null) {
-            return false; //TODO - what here?
+            return false;
         } else if(mySet.length == 0) {
             return false;
         }
@@ -92,7 +92,23 @@ public class MySet<E> implements Set<E> {
     }
 
     public boolean equals(Object o) {
-        return false;
+        if(this == o) {
+            return true;
+        } else if(o == null) {
+            return false;
+        } else if(getClass() != o.getClass()) {
+            return false;
+        }
+        MySet<E> other = (MySet<E>) o;
+        if(size != other.size) {
+            return false;
+        }
+        for(Object object : mySet) {
+            if(!(object == null) && !other.contains(object)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void fillNullIndex(E element) {
@@ -173,7 +189,11 @@ public class MySet<E> implements Set<E> {
     }
 
     public <T> T[] toArray(T[] a) {
-        return null;
+        Object[] arr = new Object[a.length];
+        for(int i = 0; i < a.length; i++) {
+            arr[i] = a[i];
+        }
+        return (T[]) arr;
     }
 
 }

@@ -114,9 +114,16 @@ public class MyArrayList<E> implements List<E> {
         }
     }
 
-    //TODO - use equals override recommendations from book
     public boolean equals(Object o) {
-        return false;
+        if(this == o) {
+            return true;
+        } else if(o == null) {
+            return false;
+        } else if(getClass() != o.getClass()) {
+            return false;
+        }
+        MyArrayList<E> other = (MyArrayList<E>) o;
+        return toString().equals(other.toString());
     }
 
     public E get(int index) {
@@ -181,6 +188,7 @@ public class MyArrayList<E> implements List<E> {
         for(int i = index; i < size - 1; i++) {
             myArray[i] = myArray[i+1];
         }
+        myArray[size - 2] = null;
         size--;
         checkTooMuchCapacity();
         return (E) retval;
@@ -270,6 +278,19 @@ public class MyArrayList<E> implements List<E> {
     }
 
     public <T> T[] toArray(T[] a) {
-        return null;
+        Object[] arr = new Object[a.length];
+        for(int i = 0; i < a.length; i++) {
+            arr[i] = a[i];
+        }
+        return (T[]) arr;
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for(Object o : myArray) {
+            sb.append(o);
+            sb.append("||");
+        }
+        return sb.toString();
     }
 }

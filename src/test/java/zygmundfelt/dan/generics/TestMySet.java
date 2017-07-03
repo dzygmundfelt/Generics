@@ -11,6 +11,8 @@ public class TestMySet {
     private MySet<String> myEmptySet;
     private MySet<String> mySet1;
     private MySet<Number> mySet2;
+    private MySet<String> mySet3;
+    private MySet<String> mySet4;
 
     @Before
     public void initialize() {
@@ -30,6 +32,20 @@ public class TestMySet {
         mySet2.add(-4);
         mySet2.add(2);
         mySet2.add(-1);
+
+        mySet3 = new MySet<String>();
+        mySet3.add("It's");
+        mySet3.add("a");
+        mySet3.add("test");
+        mySet3.add(",");
+        mySet3.add("dummy");
+
+        mySet4 = new MySet<String>();
+        mySet4.add("It's");
+        mySet4.add("a");
+        mySet4.add("test");
+        mySet4.add(",");
+        mySet4.add("dummie");
     }
 
     @Test
@@ -124,12 +140,32 @@ public class TestMySet {
 
     @Test
     public void equalsTrueTest() {
-        //TODO - not sure if I'll implement a real equals method
+        boolean result = mySet1.equals(mySet3);
+
+        Assert.assertTrue(result);
     }
 
     @Test
-    public void equalsFalseTest() {
-        //TODO - see above
+    public void equalsNullFalseTest() {
+        MySet<String> nullSet = null;
+
+        boolean result = mySet1.equals(nullSet);
+
+        Assert.assertFalse(result);
+    }
+
+    @Test
+    public void equalsDifferentTypeFalseTest() {
+        boolean result = mySet1.equals(mySet2);
+
+        Assert.assertFalse(result);
+    }
+
+    @Test
+    public void equalsSameTypeDifferentSizeFalseTest() {
+        boolean result = mySet1.equals(mySet4);
+
+        Assert.assertFalse(result);
     }
 
     @Test
