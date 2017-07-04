@@ -278,11 +278,27 @@ public class MyArrayList<E> implements List<E> {
     }
 
     public <T> T[] toArray(T[] a) {
-        Object[] arr = new Object[a.length];
-        for(int i = 0; i < a.length; i++) {
-            arr[i] = a[i];
+        resizeToArrayInput(a);
+        int i = 0;
+        while(i < size) {
+            a[i] = (T) myArray[i];
+            i++;
         }
-        return (T[]) arr;
+        return fillRemainderWithNulls(a, i);
+    }
+
+    private <T> T[] resizeToArrayInput(T[] a) {
+        if(a.length >= size) {
+            return a;
+        }
+        return (T[]) new Object[size];
+    }
+
+    private <T> T[] fillRemainderWithNulls(T[] a, int index) {
+        for(int i = index; i < a.length; i++) {
+            a[i] = null;
+        }
+        return a;
     }
 
     public String toString() {

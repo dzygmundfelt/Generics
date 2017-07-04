@@ -24,7 +24,6 @@ public class MySet<E> implements Set<E> {
         return true;
     }
 
-    //TODO - the toArray called in all these methods could be the toArray in this class. Ohhhhhh.
     public boolean addAll(Collection<? extends E> c) {
         Object[] objects = c.toArray();
         int oldSize = size;
@@ -189,11 +188,29 @@ public class MySet<E> implements Set<E> {
     }
 
     public <T> T[] toArray(T[] a) {
-        Object[] arr = new Object[a.length];
-        for(int i = 0; i < a.length; i++) {
-            arr[i] = a[i];
+        a = resizeToArrayInput(a);
+        int j = 0;
+        for(int i = 0; i < mySet.length; i++) {
+            if(mySet[i] != null) {
+                a[j] = (T) mySet[i];
+                j++;
+            }
         }
-        return (T[]) arr;
+        return fillRemainderWithNulls(a, j);
+    }
+
+    private <T> T[] resizeToArrayInput(T[] a) {
+        if (a.length >= size) {
+            return a;
+        }
+        return (T[]) new Object[size];
+    }
+
+    private <T> T[] fillRemainderWithNulls(T[] a, int index) {
+        for(int i = index; i < a.length; i++) {
+            a[i] = null;
+        }
+        return a;
     }
 
 }
